@@ -14,7 +14,7 @@ export const actions = {
     wss = new WebSocket("wss://api.bitfinex.com/ws/2");
     wss.onopen = () => {
       dispatch(actions.changeConnectionStatus(true));
-      // dispatch(actions.subscribeToBook());
+      dispatch(actions.subscribeToBook());
       dispatch(actions.subscribeToTrades());
     };
     wss.onmessage = msg => {

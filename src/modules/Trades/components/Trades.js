@@ -13,22 +13,22 @@ const Trades = ({ trades }) => {
     maximumFractionDigits: 4
   }).format;
 
-  const sortedTrades = _.orderBy(trades, ["mts"], ["desc"]);
+  const sortedTrades = _.orderBy(trades, ["mts"], ["desc"]).slice(0, 25);
 
   return (
     <div className="trades">
       <table width="100%">
         <thead>
           <tr>
-            <th className="Trade__col-arrow" />
-            <th className="Trade__col-time">Time</th>
-            <th className="Trade__col-price">Price</th>
-            <th className="Trade__col-amount">Amount</th>
+            <th className="col" />
+            <th className="col">Time</th>
+            <th className="col">Price</th>
+            <th className="col">Amount</th>
           </tr>
         </thead>
         <tbody>
           {_.map(sortedTrades, ({ id, mts, amount, price }) => {
-            const percentage = (Math.abs(amount) / price) * 20000;
+            const percentage = (Math.abs(amount) / price) * 50000;
             return (
               <tr
                 key={id}
@@ -39,9 +39,7 @@ const Trades = ({ trades }) => {
                       : `rgba(157, 194, 74, ${percentage}%)`
                 }}
               >
-                <td className="col-info">
-                  <i />
-                </td>
+                <td className="col-info">{amount >= 0 ? "up" : "down"}</td>
                 <td className="col-info">
                   <span>{new Date(mts).toLocaleTimeString()}</span>
                 </td>
@@ -54,48 +52,6 @@ const Trades = ({ trades }) => {
               </tr>
             );
           })}
-          <tr style={{ background: "rgba(225, 86, 86, 0.2)" }}>
-            <td className="col-info">
-              <i />
-            </td>
-            <td className="col-info">
-              <span>13:48:18</span>
-            </td>
-            <td className="col-info">
-              <span className=" ">
-                <span>
-                  4,135.<span className="trailing-zeros">0</span>
-                </span>
-              </span>
-            </td>
-            <td className="col-currency" style={{ paddingRight: "10px" }}>
-              <span className=" ">
-                <span>2.9923</span>
-              </span>
-            </td>
-          </tr>
-          <tr style={{ background: "rgba(225, 86, 86, 0.05)" }}>
-            <td className="col-info">
-              <i />
-            </td>
-            <td className="col-info">
-              <span>13:47:49</span>
-            </td>
-            <td className="col-info">
-              <span>
-                <span>
-                  4,135.<span className="trailing-zeros">0</span>
-                </span>
-              </span>
-            </td>
-            <td className="col-currency" style={{ paddingRight: "10px" }}>
-              <span className=" ">
-                <span>
-                  0.05<span className="trailing-zeros">00</span>
-                </span>
-              </span>
-            </td>
-          </tr>
         </tbody>
       </table>
     </div>

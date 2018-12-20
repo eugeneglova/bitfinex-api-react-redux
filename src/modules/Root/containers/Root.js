@@ -28,8 +28,18 @@ class RootContainer extends Component {
   render() {
     return (
       <div>
-        <Book />
-        <Trades />
+        <table width="100%">
+          <tbody>
+            <tr>
+              <td>
+                <Book />
+              </td>
+              <td>
+                <Trades />
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     );
   }

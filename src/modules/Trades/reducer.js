@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 export const initialState = {
   channel: {},
   trades: {}
@@ -29,11 +27,19 @@ export function reducer(state = initialState, action) {
     case types.SET_SNAPSHOT:
       return {
         ...state,
-        trades: action.payload.reduce(keyReducer, {}),
+        trades: action.payload.reduce(keyReducer, {})
       };
 
     case types.UPDATE:
-      return { ...state };
+      const trade = action.payload[1];
+
+      return {
+        ...state,
+        trades: {
+          ...state.trades,
+          ...[trade].reduce(keyReducer, {})
+        }
+      };
 
     default:
       return { ...state };
