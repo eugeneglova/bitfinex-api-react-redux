@@ -3,13 +3,13 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import { actions as rootActions, NAME as ROOT_NAME } from "../../Root";
-import { actions as bookActions, NAME as BOOK_NAME } from "../";
-import Book from "../../Book/components/Book";
+import { actions as tradesActions, NAME as TRADES_NAME } from "..";
+import Trades from "../../Trades/components/Trades";
 
 const mapStateToProps = state => {
   return {
     ...state[ROOT_NAME],
-    ...state[BOOK_NAME]
+    ...state[TRADES_NAME]
   };
 };
 
@@ -17,14 +17,14 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       ...rootActions,
-      ...bookActions
+      ...tradesActions
     },
     dispatch
   );
 
-const BookContainer = props => <Book {...props} />
+const TradesContainer = props => <Trades {...props} />
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(BookContainer);
+)(TradesContainer);

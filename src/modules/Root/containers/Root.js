@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 
 import { actions as rootActions, NAME as ROOT_NAME } from "../";
 import Book from "../../Book/containers/Book";
+import Trades from "../../Trades/containers/Trades";
 
 const mapStateToProps = state => {
   return {
@@ -28,6 +29,7 @@ class RootContainer extends Component {
     return (
       <div>
         <Book />
+        <Trades />
       </div>
     );
   }
