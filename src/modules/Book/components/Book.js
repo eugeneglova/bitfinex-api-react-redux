@@ -72,7 +72,7 @@ const Book = ({
             <svg
               style={{
                 width: "100%",
-                height: "408px",
+                height: "425px",
                 transform: "scale(-1, 1)",
                 zIndex: 0,
                 pointerEvents: "none"
@@ -111,7 +111,7 @@ const Book = ({
             <svg
               style={{
                 width: "100%",
-                height: "408px",
+                height: "425px",
                 transform: "scale(1, 1)",
                 zIndex: 0,
                 pointerEvents: "none"
