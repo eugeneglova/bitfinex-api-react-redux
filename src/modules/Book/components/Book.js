@@ -16,6 +16,15 @@ const Book = ({ snapshot, channel, decreasePrecision, increasePrecision }) => {
     maximumSignificantDigits: 3
   }).format;
 
+  const maxBid = bids.reduce((acc, item) => {
+    const total = item[1] * item[2];
+    return acc > total ? acc : total;
+  }, 0);
+  const maxAsk = asks.reduce((acc, item) => {
+    const total = item[1] * -item[2];
+    return acc > total ? acc : total;
+  }, 0);
+
   return (
     <div>
       <div>
@@ -42,6 +51,29 @@ const Book = ({ snapshot, channel, decreasePrecision, increasePrecision }) => {
             <div className="cell">Total</div>
             <div className="cell">Price</div>
           </div>
+          <div className="bars">
+            <svg
+              style={{
+                width: "100%",
+                height: "408px",
+                transform: "scale(-1, 1)",
+                zIndex: 0,
+                pointerEvents: "none"
+              }}
+            >
+              {bids.map((item, index) => (
+                <rect
+                  key={index}
+                  x="1"
+                  y={17 * index}
+                  width={`${((item[1] * item[2]) / maxBid) * 100}%`}
+                  height="17"
+                  fill="#89bc3e"
+                  fillOpacity="0.2"
+                />
+              ))}
+            </svg>
+          </div>
           {bids.map(item => (
             <div className="row" key={item[0]}>
               <div className="cell">{item[1]}</div>
@@ -57,6 +89,29 @@ const Book = ({ snapshot, channel, decreasePrecision, increasePrecision }) => {
             <div className="cell">Total</div>
             <div className="cell">Amount</div>
             <div className="cell">Count</div>
+          </div>
+          <div className="bars">
+            <svg
+              style={{
+                width: "100%",
+                height: "408px",
+                transform: "scale(1, 1)",
+                zIndex: 0,
+                pointerEvents: "none"
+              }}
+            >
+              {asks.map((item, index) => (
+                <rect
+                  key={index}
+                  x="1"
+                  y={17 * index}
+                  width={`${((item[1] * -item[2]) / maxAsk) * 100}%`}
+                  height="17"
+                  fill="#d8464e"
+                  fillOpacity="0.2"
+                />
+              ))}
+            </svg>
           </div>
           {asks.map(item => (
             <div className="row" key={item[0]}>
