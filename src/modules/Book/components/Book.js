@@ -78,7 +78,7 @@ const Book = ({
                 pointerEvents: "none"
               }}
             >
-              {_.map(asksSorted, ({ price, count, amount, total }, index) => (
+              {_.map(bidsSorted, ({ price, count, amount, total }, index) => (
                 <rect
                   key={price}
                   x="1"
