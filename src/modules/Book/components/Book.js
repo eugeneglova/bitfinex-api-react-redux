@@ -12,8 +12,9 @@ const Book = ({ snapshot, channel, decreasePrecision, increasePrecision }) => {
   const format5 = new Intl.NumberFormat("en-US", {
     maximumSignificantDigits: 5
   }).format;
-  const format3 = new Intl.NumberFormat("en-US", {
-    maximumSignificantDigits: 3
+  const format = new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
   }).format;
 
   const maxBid = bids.reduce((acc, item) => {
@@ -77,8 +78,8 @@ const Book = ({ snapshot, channel, decreasePrecision, increasePrecision }) => {
           {bids.map(item => (
             <div className="row" key={item[0]}>
               <div className="cell">{item[1]}</div>
-              <div className="cell">{format3(item[2])}</div>
-              <div className="cell">{format3(item[1] * item[2])}</div>
+              <div className="cell">{format(item[2])}</div>
+              <div className="cell">{format(item[1] * item[2])}</div>
               <div className="cell">{format5(item[0])}</div>
             </div>
           ))}
@@ -116,8 +117,8 @@ const Book = ({ snapshot, channel, decreasePrecision, increasePrecision }) => {
           {asks.map(item => (
             <div className="row" key={item[0]}>
               <div className="cell">{format5(item[0])}</div>
-              <div className="cell">{format3(item[1] * -item[2])}</div>
-              <div className="cell">{format3(-item[2])}</div>
+              <div className="cell">{format(item[1] * -item[2])}</div>
+              <div className="cell">{format(-item[2])}</div>
               <div className="cell">{item[1]}</div>
             </div>
           ))}
