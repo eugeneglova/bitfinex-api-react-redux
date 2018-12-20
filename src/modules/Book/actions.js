@@ -3,7 +3,6 @@ import { types, NAME as BOOK_NAME } from "./reducer";
 export const actions = {
   subscribed: payload => ({ type: types.SUBSCRIBED, payload }),
   message: payload => (dispatch, getState) => {
-    console.log(payload);
     if (!Array.isArray(payload)) return;
     const shanshotSize = parseInt(getState()[BOOK_NAME].channel.len) * 2;
     if (payload.length === shanshotSize) {

@@ -9,6 +9,8 @@ const Book = ({ snapshot }) => {
     .filter(a => a[2] < 0)
     .sort((a, b) => a[0] - b[0])
     .slice(0, 25);
+  const format5 = new Intl.NumberFormat('en-US', { maximumSignificantDigits: 5 }).format;
+  const format3 = new Intl.NumberFormat('en-US', { maximumSignificantDigits: 3 }).format;
   return (
     <div className="main">
       <div className="bids">
@@ -21,9 +23,9 @@ const Book = ({ snapshot }) => {
         {bids.map(item => (
           <div className="row" key={item[0]}>
             <div className="cell">{item[1]}</div>
-            <div className="cell">{item[2]}</div>
-            <div className="cell">{item[3]}</div>
-            <div className="cell">{item[0]}</div>
+            <div className="cell">{format3(item[2])}</div>
+            <div className="cell">{format3(item[1]*item[2])}</div>
+            <div className="cell">{format5(item[0])}</div>
           </div>
         ))}
       </div>
@@ -36,9 +38,9 @@ const Book = ({ snapshot }) => {
         </div>
         {asks.map(item => (
           <div className="row" key={item[0]}>
-            <div className="cell">{item[0]}</div>
-            <div className="cell">{item[3]}</div>
-            <div className="cell">{-item[2]}</div>
+            <div className="cell">{format5(item[0])}</div>
+            <div className="cell">{format3(item[1]*-item[2])}</div>
+            <div className="cell">{format3(-item[2])}</div>
             <div className="cell">{item[1]}</div>
           </div>
         ))}
