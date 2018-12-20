@@ -5,6 +5,7 @@ import { bindActionCreators } from "redux";
 import { actions as rootActions, NAME as ROOT_NAME } from "../";
 import Book from "../../Book/containers/Book";
 import Trades from "../../Trades/containers/Trades";
+import Ticker from "../../Ticker/containers/Ticker";
 
 const mapStateToProps = state => {
   return {
@@ -30,6 +31,11 @@ class RootContainer extends Component {
       <div>
         <table width="100%">
           <tbody>
+            <tr>
+              <td>
+                <Ticker />
+              </td>
+            </tr>
             <tr>
               <td>
                 <Book />

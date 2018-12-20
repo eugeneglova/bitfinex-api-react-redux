@@ -1,12 +1,14 @@
 import { types, NAME as ROOT_NAME } from "./reducer";
 import { actions as bookActions } from "../Book/actions";
 import { actions as tradesActions } from "../Trades/actions";
+import { actions as tickerActions } from "../Ticker/actions";
 
 let wss;
 
 const channel2actions = {
   book: bookActions,
-  trades: tradesActions
+  trades: tradesActions,
+  ticker: tickerActions
 };
 
 export const actions = {
@@ -16,6 +18,7 @@ export const actions = {
       dispatch(actions.changeConnectionStatus(true));
       dispatch(actions.subscribeToBook());
       dispatch(actions.subscribeToTrades());
+      dispatch(actions.subscribeToTicker());
     };
     wss.onmessage = msg => {
       const data = JSON.parse(msg.data);
@@ -52,6 +55,14 @@ export const actions = {
   subscribeToTrades: payload => dispatch => {
     const msg = {
       channel: "trades" || payload.channel,
+      event: "subscribe",
+      symbol: "tBTCUSD"
+    };
+    wss.send(JSON.stringify(msg));
+  },
+  subscribeToTicker: payload => dispatch => {
+    const msg = {
+      channel: "ticker" || payload.channel,
       event: "subscribe",
       symbol: "tBTCUSD"
     };
