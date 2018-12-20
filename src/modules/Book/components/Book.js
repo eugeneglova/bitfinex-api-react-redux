@@ -1,14 +1,21 @@
 import React from "react";
+import _ from "lodash";
 
-const Book = ({ snapshot, channel, decreasePrecision, increasePrecision }) => {
-  const bids = snapshot
-    .filter(a => a[2] > 0)
-    .sort((a, b) => b[0] - a[0])
-    .slice(0, 25);
-  const asks = snapshot
-    .filter(a => a[2] < 0)
-    .sort((a, b) => a[0] - b[0])
-    .slice(0, 25);
+const totalReducer = (acc, item, index) => [
+  ...acc,
+  {
+    ...item,
+    total: index - 1 > 0 ? acc[index - 1].total + Math.abs(item.amount) : Math.abs(item.amount)
+  }
+];
+
+const Book = ({
+  bids,
+  asks,
+  channel,
+  decreasePrecision,
+  increasePrecision
+}) => {
   const format5 = new Intl.NumberFormat("en-US", {
     maximumSignificantDigits: 5
   }).format;
@@ -17,14 +24,16 @@ const Book = ({ snapshot, channel, decreasePrecision, increasePrecision }) => {
     maximumFractionDigits: 2
   }).format;
 
-  const maxBid = bids.reduce((acc, item) => {
-    const total = item[1] * item[2];
-    return acc > total ? acc : total;
-  }, 0);
-  const maxAsk = asks.reduce((acc, item) => {
-    const total = item[1] * -item[2];
-    return acc > total ? acc : total;
-  }, 0);
+  const bidsSorted = _.orderBy(bids, ["price"], ["desc"]).reduce(
+    totalReducer,
+    []
+  );
+  const asksSorted = _.orderBy(asks, ["price"], ["asc"]).reduce(
+    totalReducer,
+    []
+  );
+  const maxBidsTotal = !bidsSorted.length || bidsSorted[bidsSorted.length - 1].total;
+  const maxAsksTotal = !asksSorted.length || asksSorted[asksSorted.length - 1].total;
 
   return (
     <div>
@@ -62,12 +71,12 @@ const Book = ({ snapshot, channel, decreasePrecision, increasePrecision }) => {
                 pointerEvents: "none"
               }}
             >
-              {bids.map((item, index) => (
+              {_.map(asksSorted, ({ price, count, amount, total }, index) => (
                 <rect
-                  key={index}
+                  key={price}
                   x="1"
                   y={17 * index}
-                  width={`${((item[1] * item[2]) / maxBid) * 100}%`}
+                  width={`${(total / maxBidsTotal) * 100}%`}
                   height="17"
                   fill="#89bc3e"
                   fillOpacity="0.2"
@@ -75,12 +84,12 @@ const Book = ({ snapshot, channel, decreasePrecision, increasePrecision }) => {
               ))}
             </svg>
           </div>
-          {bids.map(item => (
-            <div className="row" key={item[0]}>
-              <div className="cell">{item[1]}</div>
-              <div className="cell">{format(item[2])}</div>
-              <div className="cell">{format(item[1] * item[2])}</div>
-              <div className="cell">{format5(item[0])}</div>
+          {_.map(bidsSorted, ({ price, count, amount, total }) => (
+            <div className="row" key={price}>
+              <div className="cell">{count}</div>
+              <div className="cell">{format(amount)}</div>
+              <div className="cell">{format(total)}</div>
+              <div className="cell">{format5(price)}</div>
             </div>
           ))}
         </div>
@@ -101,12 +110,12 @@ const Book = ({ snapshot, channel, decreasePrecision, increasePrecision }) => {
                 pointerEvents: "none"
               }}
             >
-              {asks.map((item, index) => (
+              {_.map(asksSorted, ({ price, count, amount, total }, index) => (
                 <rect
-                  key={index}
+                  key={price}
                   x="1"
                   y={17 * index}
-                  width={`${((item[1] * -item[2]) / maxAsk) * 100}%`}
+                  width={`${(total / maxAsksTotal) * 100}%`}
                   height="17"
                   fill="#d8464e"
                   fillOpacity="0.2"
@@ -114,12 +123,12 @@ const Book = ({ snapshot, channel, decreasePrecision, increasePrecision }) => {
               ))}
             </svg>
           </div>
-          {asks.map(item => (
-            <div className="row" key={item[0]}>
-              <div className="cell">{format5(item[0])}</div>
-              <div className="cell">{format(item[1] * -item[2])}</div>
-              <div className="cell">{format(-item[2])}</div>
-              <div className="cell">{item[1]}</div>
+          {_.map(asksSorted, ({ price, count, amount, total }) => (
+            <div className="row" key={price}>
+              <div className="cell">{format5(price)}</div>
+              <div className="cell">{format(total)}</div>
+              <div className="cell">{format(-amount)}</div>
+              <div className="cell">{count}</div>
             </div>
           ))}
         </div>
