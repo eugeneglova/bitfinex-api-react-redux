@@ -30,3 +30,36 @@
     transform: rotate(360deg);
   }
 }
+
+
+
+.main {
+  display: flex;
+  justify-content: space-between;
+  text-align: right;
+  min-height: 425px;
+}
+
+.bids, .asks {
+  font-size: 11px;
+  cursor: pointer;
+  flex: 1 1;
+  min-width: 270px;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 5px;
+  height: 17px;
+}
+
+.cell {
+  width: 40px;
+}
