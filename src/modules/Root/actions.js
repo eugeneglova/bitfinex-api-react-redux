@@ -12,7 +12,7 @@ export const actions = {
     wss = new WebSocket("wss://api.bitfinex.com/ws/2");
     wss.onopen = () => {
       dispatch(actions.changeConnectionStatus(true));
-      dispatch(actions.subscribe("book"));
+      dispatch(actions.subscribe({ channel: "book" }));
     };
     wss.onmessage = msg => {
       const data = JSON.parse(msg.data);
@@ -37,16 +37,37 @@ export const actions = {
   }),
   subscribe: payload => dispatch => {
     const msg = {
-      channel: payload,
+      channel: payload.channel,
       event: "subscribe",
       // freq: "F0",
       freq: "F1",
       len: 25,
-      prec: "P0",
+      prec: payload.prec || "P0",
       symbol: "tBTCUSD"
     };
     wss.send(JSON.stringify(msg));
   },
+  unsubscribe: chanId => dispatch => {
+    const msg = {
+      event: "unsubscribe",
+      chanId
+    };
+    wss.send(JSON.stringify(msg));
+  },
   subscribed: payload => ({ type: types.SUBSCRIBED, payload }),
-  message: payload => ({ type: types.MESSAGE, payload })
+  message: payload => ({ type: types.MESSAGE, payload }),
+  decreasePrecision: channel => (dispatch, getState) => {
+    const subscriptions = getState()[ROOT_NAME].subscriptions;
+    const currentPrec = parseInt(subscriptions[channel].prec.slice(1))
+    const prec = "P" + (currentPrec + 1);
+    dispatch(actions.unsubscribe(subscriptions[channel].chanId));
+    dispatch(actions.subscribe({ channel, prec }));
+  },
+  increasePrecision: channel => (dispatch, getState) => {
+    const subscriptions = getState()[ROOT_NAME].subscriptions;
+    const currentPrec = parseInt(subscriptions[channel].prec.slice(1))
+    const prec = "P" + (currentPrec - 1);
+    dispatch(actions.unsubscribe(subscriptions[channel].chanId));
+    dispatch(actions.subscribe({ channel, prec }));
+  }
 };
