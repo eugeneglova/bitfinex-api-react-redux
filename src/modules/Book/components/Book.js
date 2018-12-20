@@ -5,7 +5,10 @@ const totalReducer = (acc, item, index) => [
   ...acc,
   {
     ...item,
-    total: index - 1 > 0 ? acc[index - 1].total + Math.abs(item.amount) : Math.abs(item.amount)
+    total:
+      index - 1 > 0
+        ? acc[index - 1].total + Math.abs(item.amount)
+        : Math.abs(item.amount)
   }
 ];
 
@@ -16,6 +19,8 @@ const Book = ({
   decreasePrecision,
   increasePrecision
 }) => {
+  if (!Object.keys(bids).length) return <div />;
+
   const format5 = new Intl.NumberFormat("en-US", {
     maximumSignificantDigits: 5
   }).format;
@@ -32,8 +37,10 @@ const Book = ({
     totalReducer,
     []
   );
-  const maxBidsTotal = !bidsSorted.length || bidsSorted[bidsSorted.length - 1].total;
-  const maxAsksTotal = !asksSorted.length || asksSorted[asksSorted.length - 1].total;
+  const maxTotal = Math.max(
+    bidsSorted[bidsSorted.length - 1].total,
+    asksSorted[asksSorted.length - 1].total
+  );
 
   return (
     <div>
@@ -76,7 +83,7 @@ const Book = ({
                   key={price}
                   x="1"
                   y={17 * index}
-                  width={`${(total / maxBidsTotal) * 100}%`}
+                  width={`${(total / maxTotal) * 100}%`}
                   height="17"
                   fill="#89bc3e"
                   fillOpacity="0.2"
@@ -115,7 +122,7 @@ const Book = ({
                   key={price}
                   x="1"
                   y={17 * index}
-                  width={`${(total / maxAsksTotal) * 100}%`}
+                  width={`${(total / maxTotal) * 100}%`}
                   height="17"
                   fill="#d8464e"
                   fillOpacity="0.2"
